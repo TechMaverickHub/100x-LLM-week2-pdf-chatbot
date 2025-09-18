@@ -116,6 +116,17 @@ POST /ask
 }
 ```
 
+## 🖼️ Screenshots
+
+### Swagger 
+![Upload PDF](screenshots\screenshot1.png)
+
+### Upload Response
+![Upload PDF](screenshots\screenshot2.png)
+
+### Chat Response
+![Chat with PDF](screenshots\screenshot3.png)
+
 ---
 
 ## 📊 Future Enhancements
