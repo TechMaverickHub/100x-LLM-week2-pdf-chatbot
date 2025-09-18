@@ -141,4 +141,4 @@ POST /ask
 
 ## 🏗️ Credits
 - Part of the **#0to100xEngineer** journey
-- Built with ❤️ using FastAPI + Groq LLaMA-3.1
+- Built using FastAPI + Groq LLaMA-3.1
