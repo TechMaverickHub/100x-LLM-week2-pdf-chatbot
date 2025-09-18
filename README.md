@@ -119,13 +119,14 @@ POST /ask
 ## 🖼️ Screenshots
 
 ### Swagger 
-![Upload PDF](screenshots\screenshot1.png)
+![Swagger UI](screenshots/screenshot1.png)
 
 ### Upload Response
-![Upload PDF](screenshots\screenshot2.png)
+![Upload PDF](screenshots/screenshot2.png)
 
 ### Chat Response
-![Chat with PDF](screenshots\screenshot3.png)
+![Chat with PDF](screenshots/screenshot3.png)
+
 
 ---
 
