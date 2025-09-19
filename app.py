@@ -6,7 +6,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from utils import _estimate_tokens, _extract_text_from_pdf
+from utils import _estimate_tokens, _extract_text_from_pdf, get_response_schema
 
 load_dotenv()
 
@@ -26,7 +26,8 @@ class AskRequest(BaseModel):
 
 @app.get("/")
 async def root():
-	return {"status": "ok", "message": "PDF-Grounded Chatbot API"}
+	return_data = {"status": "ok"}
+	return get_response_schema(return_data, "PDF-Grounded Chatbot API", status.HTTP_200_OK)
 
 
 @app.post("/upload-pdf")
@@ -44,7 +45,8 @@ async def upload_pdf(file: UploadFile = File(...)):
 		raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="PDF too large, please shorten or split.")
 
 	_pdf_text = text
-	return JSONResponse(content={"status": "processed"})
+	return_data = {"status": "processed"}
+	return get_response_schema(return_data, "PDF processed", status.HTTP_200_OK)
 
 
 @app.post("/ask")
@@ -96,7 +98,8 @@ async def ask(req: AskRequest):
 		if not answer:
 			answer = "The document does not contain that information."
 
-		return JSONResponse(content={"answer": answer})
+		return_data = {"answer": answer}
+		return get_response_schema(return_data, "Answer generated", status.HTTP_200_OK)
 	except Exception as exc:
 		# Generic failure path per plan
 		raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="We’re having trouble generating an answer. Please try again.") from exc

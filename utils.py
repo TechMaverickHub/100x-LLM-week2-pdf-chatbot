@@ -2,10 +2,21 @@ import os
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from fastapi import HTTPException, UploadFile, status
+from fastapi.responses import JSONResponse
 
 load_dotenv()
 
 CHARS_PER_TOKEN = int(os.getenv("CHARS_PER_TOKEN", "4"))
+
+def get_response_schema(schema: dict, message: str, status_code: int) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "message": message,
+            "status": status_code,
+            "results": schema,
+        },
+    )
 
 def _estimate_tokens(text: str) -> int:
 	return max(1, len(text) // CHARS_PER_TOKEN)
