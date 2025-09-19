@@ -3,9 +3,9 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, UploadFile, status
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from exception import register_exception_handlers
 from utils import _estimate_tokens, _extract_text_from_pdf, get_response_schema
 
 load_dotenv()
@@ -15,6 +15,8 @@ load_dotenv()
 MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "8000"))
 
 app = FastAPI(title="PDF-Grounded Chatbot API", version="0.1.0")
+
+register_exception_handlers(app)
 
 # In-memory store for the extracted PDF text (single active document)
 _pdf_text: Optional[str] = None
