@@ -84,7 +84,8 @@ pip install -r req.txt
 Create a `.env` file in the root directory:
 ```env
 GROQ_API_KEY=your_groq_api_key_here
-MAX_CONTEXT_TOKENS=8000
+MAX_CONTEXT_TOKENS=XXXX
+CHARS_PER_TOKEN=XXXX 
 ```
 
 ### 4. Run the Server

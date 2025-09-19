@@ -1,8 +1,11 @@
+import os
 from PyPDF2 import PdfReader
+from dotenv import load_dotenv
 from fastapi import HTTPException, UploadFile
 
+load_dotenv()
 
-CHARS_PER_TOKEN = 4
+CHARS_PER_TOKEN = int(os.getenv("CHARS_PER_TOKEN", "4"))
 
 def _estimate_tokens(text: str) -> int:
 	return max(1, len(text) // CHARS_PER_TOKEN)
