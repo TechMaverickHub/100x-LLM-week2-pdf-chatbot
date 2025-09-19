@@ -1,17 +1,17 @@
 import os
 from typing import Optional
-from dotenv import load_dotenv
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from dotenv import load_dotenv
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from PyPDF2 import PdfReader
+
+from utils import _estimate_tokens, _extract_text_from_pdf
 
 load_dotenv()
 
 # Optional: lightweight token estimate to gate oversized PDFs
 # Rough heuristic: ~4 characters per token
-CHARS_PER_TOKEN = 4
 MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "8000"))
 
 app = FastAPI(title="PDF-Grounded Chatbot API", version="0.1.0")
@@ -22,22 +22,6 @@ _pdf_text: Optional[str] = None
 
 class AskRequest(BaseModel):
 	question: str
-
-
-def _estimate_tokens(text: str) -> int:
-	return max(1, len(text) // CHARS_PER_TOKEN)
-
-
-def _extract_text_from_pdf(upload: UploadFile) -> str:
-	try:
-		reader = PdfReader(upload.file)
-		texts = []
-		for page in reader.pages:
-			content = page.extract_text() or ""
-			texts.append(content)
-		return "\n\n".join(texts).strip()
-	except Exception as exc:
-		raise HTTPException(status_code=422, detail="Could not process this PDF. Please try another file.") from exc
 
 
 @app.get("/")
