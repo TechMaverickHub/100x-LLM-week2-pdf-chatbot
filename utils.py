@@ -1,7 +1,7 @@
 import os
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException, UploadFile, status
 
 load_dotenv()
 
@@ -19,4 +19,4 @@ def _extract_text_from_pdf(upload: UploadFile) -> str:
 			texts.append(content)
 		return "\n\n".join(texts).strip()
 	except Exception as exc:
-		raise HTTPException(status_code=422, detail="Could not process this PDF. Please try another file.") from exc
+		raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Could not process this PDF. Please try another file.") from exc

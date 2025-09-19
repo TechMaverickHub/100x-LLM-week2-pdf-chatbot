@@ -2,7 +2,7 @@ import os
 from typing import Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -34,14 +34,14 @@ async def upload_pdf(file: UploadFile = File(...)):
 	global _pdf_text
 
 	if not file or (not file.filename.lower().endswith(".pdf") and file.content_type != "application/pdf"):
-		raise HTTPException(status_code=400, detail="Only PDF files are supported.")
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only PDF files are supported.")
 
 	text = _extract_text_from_pdf(file)
 	if not text:
-		raise HTTPException(status_code=422, detail="Could not process this PDF. Please try another file.")
+		raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Could not process this PDF. Please try another file.")
 
 	if _estimate_tokens(text) > MAX_CONTEXT_TOKENS:
-		raise HTTPException(status_code=413, detail="PDF too large, please shorten or split.")
+		raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="PDF too large, please shorten or split.")
 
 	_pdf_text = text
 	return JSONResponse(content={"status": "processed"})
@@ -50,11 +50,11 @@ async def upload_pdf(file: UploadFile = File(...)):
 @app.post("/ask")
 async def ask(req: AskRequest):
 	if not req.question or not req.question.strip():
-		raise HTTPException(status_code=400, detail="Question must be provided.")
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Question must be provided.")
 
 	if not _pdf_text:
 		# Specified error handling message
-		raise HTTPException(status_code=409, detail="Please upload a PDF first.")
+		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Please upload a PDF first.")
 
 	# Grounded prompting
 	system_instructions = (
@@ -74,7 +74,7 @@ async def ask(req: AskRequest):
 	api_key = os.getenv("GROQ_API_KEY")
 	if not api_key:
 		# Return a descriptive error for missing key in development
-		raise HTTPException(status_code=500, detail="Server configuration error: missing OPENAI_API_KEY.")
+		raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Server configuration error: missing OPENAI_API_KEY.")
 
 	try:
 		# Lazy import to avoid hard dependency at import time
@@ -99,4 +99,4 @@ async def ask(req: AskRequest):
 		return JSONResponse(content={"answer": answer})
 	except Exception as exc:
 		# Generic failure path per plan
-		raise HTTPException(status_code=500, detail="We’re having trouble generating an answer. Please try again.") from exc
+		raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="We’re having trouble generating an answer. Please try again.") from exc
