@@ -2,50 +2,30 @@ from enum import Enum
 
 
 class SuccessMessage(str, Enum):
-    # Generic CRUD
-    RECORD_CREATED = "Record created successfully."
-    RECORD_RETRIEVED = "Record retrieved successfully."
-    RECORD_UPDATED = "Record updated successfully."
-    RECORD_DELETED = "Record deleted successfully."
+    """Success messages used across the application."""
 
-    # Auth
-    CREDENTIALS_MATCHED = "Login successful."
-    CREDENTIALS_REMOVED = "Logout successful."
-
-    # App specific
-    API_HEALTHY = "PDF-Grounded Chatbot API is healthy."
-    PDF_PROCESSED = "PDF processed successfully."
+    # Generic
     ANSWER_GENERATED = "Answer generated successfully."
+    PDF_PROCESSED = "PDF processed successfully."
+    API_HEALTHY = "PDF-Grounded Chatbot API is healthy."
 
 
 class ErrorMessage(str, Enum):
+    """Error messages used across the application."""
+
     # Generic
-    SOMETHING_WENT_WRONG = "Something went wrong, please try again."
     BAD_REQUEST = "Bad request."
-    FORBIDDEN = "Not Authorized."
-    NOT_FOUND = "Resource not found."
-    UNAUTHORIZED = "Not Authenticated."
     CONFLICT = "Conflict."
-    UNPROCESSABLE_ENTITY = "Unprocessable entity."
-    PAYLOAD_TOO_LARGE = "Payload too large."
     INTERNAL_SERVER_ERROR = "Internal server error."
-
-    # Validation/auth specifics
-    PASSWORD_MISMATCH = "Password Mismatch."
-    MISSING_FIELDS = "Fields Missing"
-    THROTTLE_LIMIT_EXCEEDED = "Throttle Limit Exceeded"
-
-    # Domain examples
-    CATEGORY_NOT_FOUND = "Category not found"
-    POST_ALREADY_LIKE = "Post already liked"
+    NOT_FOUND = "Resource not found."
+    SOMETHING_WENT_WRONG = "Something went wrong, please try again."
+    UNPROCESSABLE_ENTITY = "Unprocessable entity."
 
     # App specific
+    ANSWER_GENERATION_FAILED = "We’re having trouble generating an answer. Please try again."
     ONLY_PDF_SUPPORTED = "Only PDF files are supported."
+    PDF_NOT_UPLOADED = "Please upload a PDF first."
     PDF_PROCESSING_FAILED = "Could not process this PDF. Please try another file."
     PDF_TOO_LARGE = "PDF too large, please shorten or split."
-    PDF_NOT_UPLOADED = "Please upload a PDF first."
     QUESTION_REQUIRED = "Question must be provided."
     SERVER_MISCONFIGURED = "Server configuration error: missing GROQ_API_KEY."
-    ANSWER_GENERATION_FAILED = "We’re having trouble generating an answer. Please try again."
-
-
