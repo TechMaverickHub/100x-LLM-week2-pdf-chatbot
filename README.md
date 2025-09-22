@@ -28,7 +28,7 @@ If the PDF does not contain the answer, the bot responds with:
 ## 📂 Project Structure
 ```
 / (root)
-  ├── app.py          # FastAPI app with endpoints
+  ├── main.py          # FastAPI app with endpoints
   ├── plan.md         # Detailed implementation plan
   ├── req.txt         # Dependencies
   └── README.md       # This file
@@ -90,7 +90,7 @@ CHARS_PER_TOKEN=XXXX
 
 ### 4. Run the Server
 ```bash
-uvicorn app:app --reload
+uvicorn app:main --reload
 ```
 
 Server will be live at:  
