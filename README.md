@@ -28,7 +28,7 @@ If the PDF does not contain the answer, the bot responds with:
 ## 📂 Project Structure
 ```
 / (root)
-  ├── app.py          # FastAPI app with endpoints
+  ├── main.py          # FastAPI app with endpoints
   ├── plan.md         # Detailed implementation plan
   ├── req.txt         # Dependencies
   └── README.md       # This file
@@ -84,12 +84,13 @@ pip install -r req.txt
 Create a `.env` file in the root directory:
 ```env
 GROQ_API_KEY=your_groq_api_key_here
-MAX_CONTEXT_TOKENS=8000
+MAX_CONTEXT_TOKENS=XXXX
+CHARS_PER_TOKEN=XXXX 
 ```
 
 ### 4. Run the Server
 ```bash
-uvicorn app:app --reload
+uvicorn app:main --reload
 ```
 
 Server will be live at:  

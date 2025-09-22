@@ -1,8 +1,22 @@
+import os
 from PyPDF2 import PdfReader
-from fastapi import HTTPException, UploadFile
+from dotenv import load_dotenv
+from fastapi import HTTPException, UploadFile, status
+from fastapi.responses import JSONResponse
 
+load_dotenv()
 
-CHARS_PER_TOKEN = 4
+CHARS_PER_TOKEN = int(os.getenv("CHARS_PER_TOKEN", "4"))
+
+def get_response_schema(schema: dict, message: str, status_code: int) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "message": message,
+            "status": status_code,
+            "results": schema,
+        },
+    )
 
 def _estimate_tokens(text: str) -> int:
 	return max(1, len(text) // CHARS_PER_TOKEN)
@@ -16,4 +30,4 @@ def _extract_text_from_pdf(upload: UploadFile) -> str:
 			texts.append(content)
 		return "\n\n".join(texts).strip()
 	except Exception as exc:
-		raise HTTPException(status_code=422, detail="Could not process this PDF. Please try another file.") from exc
+		raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Could not process this PDF. Please try another file.") from exc
