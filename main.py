@@ -63,16 +63,27 @@ async def ask(req: AskRequest):
 
 	# Grounded prompting
 	system_instructions = (
-		"You are a helpful assistant that answers ONLY using the provided DOCUMENT. "
-		"If the DOCUMENT does not contain the answer, reply exactly: "
-		"'The document does not contain that information.' Keep answers concise."
+	"You are a helpful assistant that ONLY answers using the provided DOCUMENT. "
+	"If the DOCUMENT does not contain the answer, reply exactly: "
+	"'The document does not contain that information.' "
+	"Format answers in clean Markdown with bullet points, numbered lists, or short paragraphs. "
+	"Use **bold** for important terms and keep the tone concise and user-friendly. "
+	"If the content is a process or steps, use a numbered list. "
+	"If it is a set of features or items, use bullet points."
 	)
 
 	prompt = (
 		"[DOCUMENT]\n" + _pdf_text + "\n\n" +
 		"[QUESTION]\n" + req.question.strip() + "\n\n" +
-		"[INSTRUCTIONS]\n- Only answer using DOCUMENT.\n"
-		"- If unsure or not present, say it is not in the document."
+		"[INSTRUCTIONS]\n"
+		"- Only answer using the DOCUMENT.\n"
+		"- If unsure or not present, reply: 'The document does not contain that information.'\n"
+		"- Use Markdown formatting:\n"
+		"  * **Bold** for key terms\n"
+		"  * Bullet points for lists of items\n"
+		"  * Numbered lists for ordered steps\n"
+		"- Keep paragraphs short for readability in chat UI.\n"
+		"- Never include raw metadata like [DOCUMENT] or [QUESTION] in the output."
 	)
 
 	# Call OpenAI
